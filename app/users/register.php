@@ -13,6 +13,4 @@ require __DIR__ . '/../../views/header.php'; ?>
 
 //Register the user
 
-
-redirect('/');
 ?>

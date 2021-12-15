@@ -20,10 +20,11 @@
             <?php endif; ?>
         </li>
 
-
-        <li class="nav-item">
-            <a href="/app/users/register.php" class="nav-link <?php echo $_SERVER['SCRIPT_NAME'] === '/app/users/register.php' ? 'active' : ''; ?>">Register Account</a>
-        </li>
+        <?php if (!isset($_SESSION['user'])) : ?>
+            <li class="nav-item">
+                <a href="/register.php" class="nav-link <?php echo $_SERVER['SCRIPT_NAME'] === '/register.php' ? 'active' : ''; ?>">Register Account</a>
+            </li>
+        <?php endif; ?>
 
 
     </ul>
