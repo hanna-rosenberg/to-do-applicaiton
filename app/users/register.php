@@ -9,7 +9,6 @@ $errors = [];
 //Register the user
 
 if (isset($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password-repeat'])) :
-
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
