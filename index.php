@@ -5,7 +5,7 @@
     <h1><?php echo $config['title']; ?></h1>
     <p>Heli Do</p>
     <?php if ($_SESSION['user']) : ?>
-        <p>Welcome, <?php echo $_SESION['user']["name"]; ?> </p>
+        <p>Welcome, <?php echo $_SESSION['user']["name"]; ?> </p>
     <?php endif; ?>
 </article>
 

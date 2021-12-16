@@ -22,7 +22,7 @@
             <small class="form-text">Please provide your password (passphrase)</small>
         </div>
         <div class="login-form">
-            <label for="password">Password</label><input type="password" class="form-control" name="password" id="password" placeholder="Repeat password" required>
+            <label for="password">Password</label><input type="password" class="form-control" name="password-repeat" id="password" placeholder="Repeat password" required>
             <small class="form-text">Please provide your password (passphrase)</small>
         </div>
         <button type="submit" class="btn btn-form">Sign Up</button>
