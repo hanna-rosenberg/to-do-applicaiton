@@ -3,7 +3,7 @@
 
 <article>
     <h1>About</h1>
-    <p>This is the about page.</p>
+    <p>If you're here something probably went wrong....</p>
 </article>
 
 <?php require __DIR__ . '/views/footer.php'; ?>
