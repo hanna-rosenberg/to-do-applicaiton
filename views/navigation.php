@@ -20,11 +20,15 @@
             <?php endif; ?>
         </li>
 
-        <?php if (!isset($_SESSION['user'])) : ?>
-            <li class="nav-item">
+
+        <li class="nav-item">
+            <?php if (isset($_SESSION['user'])) : ?>
+                <a href="/profile.php" class="nav-link <?php echo $_SERVER['SCRIPT_NAME'] === '/profile.php' ? 'active' : ''; ?>">My Account</a>
+            <?php else : ?>
                 <a href="/register.php" class="nav-link <?php echo $_SERVER['SCRIPT_NAME'] === '/register.php' ? 'active' : ''; ?>">Register Account</a>
-            </li>
-        <?php endif; ?>
+
+            <?php endif; ?>
+        </li>
 
 
     </ul>

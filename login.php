@@ -23,5 +23,4 @@
             Password: the-darjeeling-limited</p>
     </div>
 </article>
-<?php $oldpassword = '$2y$10$syAwWK6/BFCpylyRoEAc/eRyVWk/BGYn2tddHx30S4FjTAkXiy5HC'; ?>
 <?php require __DIR__ . '/views/footer.php'; ?>
