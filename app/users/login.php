@@ -24,7 +24,7 @@ $statement->execute();
 
 $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-if ($email === $user['email'] && password_verify($password, $user['password'])) {
+if ($email === $user['email'] && password_verify($password, $user['password'])) :
     $_SESSION['user'] = [
         "id" => $user['id'],
         "name" => $user['name'],
@@ -32,6 +32,6 @@ if ($email === $user['email'] && password_verify($password, $user['password'])) 
     ];
 
     redirect('/');
-} else {
+else :
     redirect('/about.php');
-}
+endif;
