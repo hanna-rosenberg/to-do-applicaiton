@@ -18,9 +18,9 @@
         <button type="submit" class="btn btn-form">Login</button>
     </form>
     <div>
-        <p>Email: francis@darjeeling.com</p>
+        <p>Email: test@test.com</p>
         <p>
-            Password: the-darjeeling-limited</p>
+            Password: 123</p>
     </div>
 </article>
 <?php require __DIR__ . '/views/footer.php'; ?>

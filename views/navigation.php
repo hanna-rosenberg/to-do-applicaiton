@@ -1,5 +1,5 @@
 <nav class="navbar">
-    <a href="#" class="navbar-brand"><?php echo $config['title']; ?></a>
+    <a href="#" class="navbar-brand"><?php echo $config['title']; ?>LOGO </a>
 
     <ul class="navbar-nav">
         <li class="nav-item">
