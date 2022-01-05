@@ -16,14 +16,30 @@ if (isset($_FILES['profile-pic'])) :
                 $fileName = date('y-m-d') . '-' . $avatar['name'];
                 $destination = __DIR__ . '/../../uploads/' . $fileName;
                 move_uploaded_file($avatar['tmp_name'], $destination);
-                echo 'success';
+
+                $id = $_SESSION['user']['id'];
+                $path = '/../../uploads/' . $fileName;
+
+                $query = 'UPDATE users SET image = :path WHERE id = :id';
+                $statement = $database->prepare($query);
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->bindParam(':path', $path, PDO::PARAM_STR);
+                $statement->execute();
+
+                $_SESSION['user']['image'] = $path;
+
+                $_SESSION['confirm'] = 'Profile image uploaded!';
+                redirect('/profile.php');
             else :
-                echo 'Your file is too big!';
+                $_SESSION['image_errors'][] = 'Your file is too big!';
+                redirect('/profile.php');
             endif;
         else :
-            echo 'There was an error uploading your file!';
+            $_SESSION['image_errors'][] = 'There was an error uploading your file!';
+            redirect('/profile.php');
         endif;
     else :
-        echo 'The file type is not allowed!';
+        $_SESSION['image_errors'][] = 'The file type is not allowed!';
+        redirect('/profile.php');
     endif;
 endif;
