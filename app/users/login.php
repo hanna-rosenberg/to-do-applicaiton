@@ -13,7 +13,7 @@ if (isset($_POST['email'], $_POST['password'])) :
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) :
         $_SESSION['errors'][] = 'The email adress is not a valid email adress!';
-        redirect('/login.php');
+        redirect('/Test.php');
     endif;
 
     $query = 'SELECT * FROM users WHERE email = :email';
@@ -35,7 +35,7 @@ if (isset($_POST['email'], $_POST['password'])) :
         redirect('/index.php');
     elseif (!password_verify($_POST['password'], $user['password']) || $user['email'] !== $_POST['email']) :
         $_SESSION['errors'][] = 'The email address or the password is incorrect.';
-        redirect('/login.php');
+        redirect('/Test.php');
     endif;
 
 endif;
