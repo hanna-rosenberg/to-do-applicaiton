@@ -52,32 +52,6 @@ $statement->bindParam(':completed', $completed, PDO::PARAM_BOOL);
 
 $statement->execute();
 
-//funkish
-// $query = 'INSERT INTO tasks (user_id, title, description, created, due_date, completed) VALUES (:user_id, :title, :description, :created, :due_date, :completed)';
-
-// $statement = $database->prepare($query);
-// $statement->bindParam(':user_id', $id, PDO::PARAM_STR);
-// $statement->bindParam(':title', $taskTitle, PDO::PARAM_STR);
-// $statement->bindParam(':description', $taskDescription, PDO::PARAM_STR);
-// $statement->bindParam(':created', $taskCreated, PDO::PARAM_STR);
-// $statement->bindParam(':due_date', $dueDate, PDO::PARAM_STR);
-// $statement->bindParam(':completed', $completed, PDO::PARAM_BOOL);
-
-// $statement->execute();
-// die(var_dump($statement));
-// $query = 'INSERT INTO tasks (user_id, title, list_id, description, created, due_date, completed VALUES :id, :title, :list_id, :description, :created, :due_date, :completed';
-// //ERROR : Uncaught Error: Call to a member function bindParam() on bool
-// $statement = $database->prepare($query);
-// $statement->bindParam(':id', $id, PDO::PARAM_STR);
-// $statement->bindParam(':title', $taskTitle, PDO::PARAM_STR);
-// $statement->bindParam(':list_id', $listId, PDO::PARAM_INT);
-// $statement->bindParam(':description', $taskDescription, PDO::PARAM_STR);
-// $statement->bindParam(':created', $taskCreated, PDO::PARAM_STR);
-// $statement->bindParam(':due_date', $dueDate, PDO::PARAM_STR);
-// $statement->bindParam(':completed', $completed, PDO::PARAM_INT);
-
-// $statement->execute();
-
-// $task = $statement->fetchAll(PDO::FETCH_ASSOC);
+$tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 redirect('/tasks.php');
