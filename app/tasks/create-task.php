@@ -9,8 +9,8 @@ require __DIR__ . '/../autoload.php';
 
 if (isset($_POST['title'])) :
     $taskTitle = trim($_POST['title']);
-    $id = $_SESSION['user']['id'];
-    $taskCreated = date('y-m-d');
+    $userId = $_SESSION['user']['id'];
+    $taskCreated = date('Y-m-d');
     $completed = false;
     $listId = '';
 
@@ -21,11 +21,11 @@ if (isset($_POST['title'])) :
     endif;
 
     if (isset($_POST['date'])) :
-        if ($_POST['date'] > date('y-m-d')) :
+        if ($_POST['date'] > date('Y-m-d')) :
             $dueDate = $_POST['date'];
         else :
-            $_SESSION['message'] = 'The date has already past, choose a later date.';
-            echo $_SESSION['message'];
+            $_SESSION['errors'][] = 'The date has already past, choose a later date.';
+            redirect('/tasks.php');
         endif;
     else :
         $dueDate = '';
@@ -34,13 +34,15 @@ if (isset($_POST['title'])) :
 // if (isset($_POST['list'])) :
 //     $listId = $_POST['list'];
 // endif;
+// $listID = '1';
 endif;
 
+// die(var_dump($userId, $taskTitle, $listID, $taskDescription, $taskCreated, $dueDate, $completed));
 //chaos, to do: learn mysql
-$query = 'INSERT INTO tasks (user_id, title, list_id, description, created, due_date, completed) VALUES (:user_id, :title, :list_id, :description, :created, :due_date, :completed)';
+$query = 'INSERT INTO tasks (user_id, title, list_id, description, created, due_date, completed) VALUES (:user_id, :title, :list_id,:description, :created, :due_date, :completed)';
 
 $statement = $database->prepare($query);
-$statement->bindParam(':user_id', $id, PDO::PARAM_STR);
+$statement->bindParam(':user_id', $userId, PDO::PARAM_STR);
 $statement->bindParam(':title', $taskTitle, PDO::PARAM_STR);
 $statement->bindParam(':list_id', $listId, PDO::PARAM_INT);
 $statement->bindParam(':description', $taskDescription, PDO::PARAM_STR);
@@ -78,4 +80,4 @@ $statement->execute();
 
 // $task = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-redirect('/');
+redirect('/tasks.php');
