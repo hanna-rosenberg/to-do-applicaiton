@@ -1,5 +1,5 @@
-<?php require __DIR__ . '/app/autoload.php'; ?>
-<?php require __DIR__ . '/views/header.php'; ?>
+<?php require __DIR__ . '/navigation.php'; ?>
+
 
 <article>
     <h1>About</h1>
