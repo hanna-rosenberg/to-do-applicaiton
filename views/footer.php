@@ -5,9 +5,7 @@
 
 <script src="/assets/scripts/app.js" defer></script>
 <footer>
-    <!-- <div>
-        <p><? $config['titel']; ?></p>
-    </div> -->
+
 </footer>
 </body>
 
