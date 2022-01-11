@@ -9,18 +9,18 @@ $first_part = $components[1];
 ?>
 <article>
     <?php if ($_SESSION['user']) :
-        $id = $_SESSION['user']['id'];
-        $statement = $database->prepare('SELECT * FROM users WHERE id = :id');
-        $statement->bindParam(':id', $id, PDO::PARAM_INT);
-        $statement->execute();
 
-        $users = $statement->fetchAll(PDO::FETCH_ASSOC);
+        tasksToComplete($database, $_SESSION['user']['id']);
 
 
+        // $id = $_SESSION['user']['id'];
+        // $statement = $database->prepare('SELECT * FROM users WHERE id = :id');
+        // $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        // $statement->execute();
 
-        // die(var_dump($first_part));
+        // $users = $statement->fetchAll(PDO::FETCH_ASSOC);
+
     ?>
-
         <div class="container">
             <div class="view-account">
                 <section class="module">
@@ -33,11 +33,10 @@ $first_part = $components[1];
                                     <img class="img-profile img-circle img-responsive" src="<?php echo $_SESSION['user']['image']; ?>" alt="">
                                 <? endif; ?>
                                 <ul class="meta list list-unstyled">
-                                    <li class="name">Name
-                                        <label class="label label-info">Role</label>
+                                    <li class="name"><?php echo $_SESSION['user']['name'] ?><br>
+                                        <label class="label label-info">Web developer</label>
                                     </li>
-                                    <li class="email"><a href="#">Link</a></li>
-                                    <li class="activity">INDEX</li>
+                                    <li class="activity">Web developer</li>
                                 </ul>
                             </div>
 
@@ -45,16 +44,14 @@ $first_part = $components[1];
                             <nav class="side-menu">
                                 <ul class="nav">
 
+                                    <li class="<?php if ($first_part == "index.php") : echo "active";
+                                                endif; ?>"><a href="/index.php">Home</a></li>
                                     <li class="<?php if ($first_part == "profile.php") : echo "active";
                                                 endif; ?>"><a href="/profile.php">Profile</a></li>
                                     <li class="<?php if ($first_part == "tasks.php") : echo "active";
                                                 endif; ?>"><a href="/tasks.php">Tasks</a></li>
                                     <li class="<?php if ($first_part == "lists.php") : echo "active";
                                                 endif; ?>"><a href="/lists.php">Lists</a></li>
-                                    <li class="<?php if ($first_part == "index.php") : echo "active";
-                                                endif; ?>"><a href="/index.php">Home</a></li>
-                                    <li class="<?php if ($first_part == "register.php") : echo "active";
-                                                endif; ?>"><a href="/register.php">Register</a></li>
                                     <li class="<?php if ($first_part == "logout.php") : echo "active";
                                                 endif; ?>"><a href="/app/users/logout.php">Log out</a></li>
                                 </ul>
