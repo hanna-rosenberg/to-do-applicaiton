@@ -37,26 +37,6 @@
 
             </div>
         </div>
-
-
-
-
-
-
-
-        <!-- <form action="app/users/login.php" method="post">
-                    <div class="mb-3">
-                        <label for="email">Email</label>
-                        <input class="form-control" type="email" name="email" id="email" placeholder="test@test.com" required>
-                        <small class="form-text">Please provide the your email address.</small>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password">Password</label>
-                        <input class="form-control" type="password" name="password" id="password" required>
-                        <small class="form-text">Please provide the your password (passphrase).</small>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form> -->
         <hr>
         <div class="form-group">
             <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
