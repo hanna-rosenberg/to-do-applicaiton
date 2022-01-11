@@ -13,6 +13,7 @@ if (isset($_POST['title'])) :
     $taskCreated = date('Y-m-d');
     $completed = false;
     $listId = '';
+    // $id = $_SESSION['user']['id'];
 
     if (isset($_POST['description'])) :
         $taskDescription = trim($_POST['description']);
@@ -30,15 +31,9 @@ if (isset($_POST['title'])) :
     else :
         $dueDate = '';
     endif;
-//add the task to a list
-// if (isset($_POST['list'])) :
-//     $listId = $_POST['list'];
-// endif;
-// $listID = '1';
+
 endif;
 
-// die(var_dump($userId, $taskTitle, $listID, $taskDescription, $taskCreated, $dueDate, $completed));
-//chaos, to do: learn mysql
 $query = 'INSERT INTO tasks (user_id, title, list_id, description, created, due_date, completed) VALUES (:user_id, :title, :list_id,:description, :created, :due_date, :completed)';
 
 $statement = $database->prepare($query);
@@ -52,6 +47,13 @@ $statement->bindParam(':completed', $completed, PDO::PARAM_BOOL);
 
 $statement->execute();
 
+$query = 'SELECT * FROM tasks WHERE user_id = :user_id';
+$statement = $database->prepare($query);
+$statement->bindParam(':user_id', $userId, PDO::PARAM_INT);
+$statement->execute();
+
 $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+$_SESSION['task-created'] = 'A new task was created.';
 
 redirect('/tasks.php');
