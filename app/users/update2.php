@@ -1,9 +1,11 @@
-<?
+<?php
 
 declare(strict_types=1);
-
+//TELL THE USER IF PASSWORD WASN'T REPEATED
+//Add confirm with old password then log out user
+//Secure password por favor
+//Can still get same email!!!
 require __DIR__ . '/../autoload.php';
-
 
 
 $id = $_SESSION['user']['id'];
@@ -15,7 +17,7 @@ if (isset($_POST['submit'])) :
 
         redirect('/profile.php');
     endif;
-
+    //kolla confirm med lösenord
     $query = 'SELECT password from users WHERE id = :id';
 
     $statement = $database->prepare($query);
@@ -54,7 +56,6 @@ if (isset($_POST['submit'])) :
 
         $_SESSION['confirm-email'] = 'Your e-mail was successfully updated!';
     endif;
-
 
     if (isset($_POST['updated-pwd'], $_POST['repeate-updated-pwd'])) :
         $updPwd = $_POST['updated-pwd'];
