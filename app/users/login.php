@@ -1,10 +1,8 @@
 <?php
-//DONE
+
 declare(strict_types=1);
 
 require __DIR__ . '/../autoload.php';
-
-//Login the user
 
 if (isset($_POST['email'], $_POST['password'])) :
     $email = trim($_POST['email']);
@@ -12,7 +10,7 @@ if (isset($_POST['email'], $_POST['password'])) :
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) :
         $_SESSION['errors'][] = 'The email adress is not a valid email adress!';
-        redirect('/Test.php');
+        redirect('/login.php');
     endif;
 
     $query = 'SELECT * FROM users WHERE email = :email';
@@ -23,12 +21,11 @@ if (isset($_POST['email'], $_POST['password'])) :
 
     if (!$user) :
         $_SESSION['errors'][] = 'The email address or the password is incorrect.';
-        redirect('/Test.php');
+        redirect('/login.php');
     endif;
 
 
     if (password_verify($password, $user['password'])) :
-
         unset($user['password']);
 
         $_SESSION['user'] = [
@@ -39,9 +36,10 @@ if (isset($_POST['email'], $_POST['password'])) :
         ];
 
         redirect('/index.php');
+
     elseif (!password_verify($_POST['password'], $user['password']) || $user['email'] !== $_POST['email']) :
         $_SESSION['errors'][] = 'The email address or the password is incorrect.';
-        redirect('/Test.php');
+        redirect('/login.php');
     endif;
 
 endif;

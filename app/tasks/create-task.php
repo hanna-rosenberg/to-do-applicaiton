@@ -5,15 +5,11 @@ declare(strict_types=1);
 require __DIR__ . '/../autoload.php';
 
 
-//Store/insert new posts in the database
-
 if (isset($_POST['title'])) :
     $taskTitle = trim($_POST['title']);
     $userId = $_SESSION['user']['id'];
     $taskCreated = date('Y-m-d');
     $completed = false;
-    $listId = '';
-    // $id = $_SESSION['user']['id'];
 
     if (isset($_POST['description'])) :
         $taskDescription = trim($_POST['description']);
@@ -30,6 +26,12 @@ if (isset($_POST['title'])) :
         endif;
     else :
         $dueDate = '';
+    endif;
+
+    if (isset($_POST['list'])) :
+        $listId = trim($_POST['list']);
+    else :
+        $listId = 0;
     endif;
 
 endif;

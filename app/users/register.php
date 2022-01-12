@@ -5,15 +5,12 @@ declare(strict_types=1);
 require __DIR__ . '/../autoload.php';
 
 
-//Register the user
-
 if (isset($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password-repeat'])) :
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $passwordRepeat = $_POST['password-repeat'];
 
-    //Use a function instead
     $statement = $database->prepare('SELECT * FROM users WHERE email = :email');
     $statement->bindParam(':email', $email, PDO::PARAM_STR);
     $statement->execute();
@@ -43,7 +40,7 @@ if (isset($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password-
             $hashPassword = password_hash($password, PASSWORD_BCRYPT);
 
             $image = '/uploads/profile-placeholder-img.jpg';
-            //Does not work now...
+
             $query = 'INSERT INTO users (name, email, password, image) VALUES (:name, :email, :password, :image)';
 
             $statement = $database->prepare($query);
@@ -54,15 +51,12 @@ if (isset($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password-
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-            $_SESSION['confirm'][] = 'Welcome to Heli do, your registration was succesfull, you can now login!';
+            $_SESSION['confirm'][] = 'Your registration was succesfull, you can now login!';
             redirect('/login.php');
         endif;
-
     endif;
-
 endif;
 
 redirect('/register.php');
-
 
 require __DIR__ . '/views/footer.php';

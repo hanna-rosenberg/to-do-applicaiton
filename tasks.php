@@ -2,13 +2,6 @@
 
 require __DIR__ . '/navigation.php';
 
-$query = 'SELECT * FROM tasks WHERE user_id = :user_id';
-$statement = $database->prepare($query);
-$statement->bindParam(':user_id', $id, PDO::PARAM_INT);
-$statement->execute();
-
-$tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <div class="content-panel">
@@ -28,23 +21,20 @@ $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
             unset($_SESSION['errors']);
         endif;
         if (isset($_SESSION['task-created'])) : ?>
-            <p class="alert alert-success"><?php echo $_SESSION['task-created']; ?></p>
+            <p class="alert alert-success"><?php echo htmlspecialchars($_SESSION['task-created']); ?></p>
         <?php unset($_SESSION['task-created']);
         endif;
         if (isset($_SESSION['task-deleted'])) : ?>
-            <p class="alert alert-success"><?php echo $_SESSION['task-deleted']; ?></p>
+            <p class="alert alert-success"><?php echo htmlspecialchars($_SESSION['task-deleted']); ?></p>
         <?php unset($_SESSION['task-deleted']);
         endif;
-
         if (isset($_SESSION['task-updated'])) : ?>
-            <p class="alert alert-success"><?php echo $_SESSION['task-updated']; ?></p>
+            <p class="alert alert-success"><?php echo htmlspecialchars($_SESSION['task-updated']); ?></p>
         <?php unset($_SESSION['task-updated']);
         endif;
         ?>
 
-        <!-- CONTENT -->
-        <h1>Welcome, <?php echo htmlspecialchars($_SESSION['user']['name']) ?>, lets create a task! </h1>
-
+        <h3 class="title"><?php echo htmlspecialchars($_SESSION['user']['name']) ?>, lets create a task and finish it in the last second! </h3>
         <div class="form-group">
             <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
                 <button class="btn btn-primary all-tasks">All Tasks +</button>
@@ -70,37 +60,46 @@ $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
                     <input class="form-control" type="date" name="date" id="date">
                     <small class="form-text">Set a due date for your task.</small>
                 </div>
+                <div class="task-form">
+                    <label for="list">Place task in list</label>
+                    <select name="list" id="list" class="form-control" id="addToList">
+                        <option value="" disabled selected class="placeholder">Add task to list</option>
+                        <?php $lists = get_all_lists($database);
+                        foreach ($lists as $list) : ?>
+                            <option value="<?php echo $list['id']; ?>"><?php echo htmlspecialchars($list['title']); ?></option>
+                        <?php endforeach ?>
+                    </select>
+                    <small class="form-text">Place task in task-list.</small>
+                </div>
                 <button type="submit" class="btn btn-primary">Add task</button>
             </form>
         </section>
-        <!-- CREATE TASK END -->
-
         <hr>
-        <!-- SECTION SHOW TASK START -->
         <section class="show-task-container hidden">
-            <!-- TOP INFO -->
-            <div class="row">
-                <div class="col">
-                    <p>Titel</p>
-                </div>
-                <div class="col">
-                    <p style="text-decoration: solid;">Due date</p>
-                </div>
-            </div>
-            <hr>
-            <!-- PRINT EACH TASK -->
-            <?php foreach ($tasks as $task) : ?>
-                <!-- col-md-push-2 col-sm-push-3 col-xs-push-0 -->
+            <?php $tasks = get_all_tasks($database);
+            foreach ($tasks as $task) : ?>
+
                 <div class="taskRow" data-id="<?php echo $task['id'] ?>">
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="col">
-                            <h5> <?php echo $task["title"]; ?></h5>
+                            <h5><?php echo htmlspecialchars($task["title"]); ?></h5>
+                            <small><?php echo htmlspecialchars($task["description"]); ?></small>
                         </div>
                         <div class="col">
-                            <p> <?php echo $task["due_date"]; ?></p>
+                            <span>Due date</span>
+                            <p><?php echo htmlspecialchars($task["due_date"]); ?></p>
                         </div>
-                        <!-- <div class=col-sm-2></div> -->
+
                         <div class="col-md-push-2 col-sm-push-1 col-xs-push-0">
+                            <form action="/app/tasks/update-task.php" method="POST">
+                                <input type="hidden" value="<?php echo $task['id'] ?>" name="not-completed-task">
+                                <button type="submit" name="completed" class="completeBtn btn btn-form btn-sm img-responsive"><img src="/assets/images/double-tick-not-done.png" class="complete" value="<?= $task['id'] ?>"></button>
+                            </form>
+
+                            <form action="/app/tasks/update-task.php" method="POST">
+                                <input type="hidden" value="<?php echo $task['id'] ?>" name="completed-task">
+                                <button type="submit" name="completed" class="completeBtn btn btn-form btn-sm img-responsive"><img src="/assets/images/double-tick-done.png" class="complete" value="<?= $task['id'] ?>"></button>
+                            </form>
 
                             <button type="submit" name="edit-task" class="editBtn btn btn-form btn-sm img-responsive"><img src="/assets/images/edit.png" class="img-responsive" value="<?= $task['id'] ?>"></button>
 
@@ -130,15 +129,12 @@ $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
                                 <small class="form-text">Set a due date for your task.</small>
                             </div>
                             <input type="hidden" value="<?php echo $task['id'] ?>" name="edit-task">
-                            <button type="submit" name="edit" value="<?php echo $task['id'] ?>" class="btn btn-primary"> <?= $task['id'] ?></button>
+                            <button type="submit" name="edit" value="<?php echo $task['id'] ?>" class="btn btn-primary">Edit task</button>
                         </form>
                     </section>
                     <hr>
-                    <!-- EDIT TASK END -->
                 </div>
-            <?
-            endforeach;
-            ?>
+            <?php endforeach; ?>
         </section>
     </fieldset>
 </div>
@@ -147,10 +143,8 @@ $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
 </div>
 </div>
 <?php
-
 if (!$_SESSION['user']) :
     redirect('/login.php');
 endif; ?>
-
 </article>
 <?php require __DIR__ . '/views/footer.php'; ?>

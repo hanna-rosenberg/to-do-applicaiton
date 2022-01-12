@@ -34,5 +34,4 @@ endif;
 
 $_SESSION['errors'][] = 'Something went wrong.';
 
-
 redirect('/tasks.php');

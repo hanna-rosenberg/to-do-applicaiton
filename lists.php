@@ -1,20 +1,6 @@
 <?php require __DIR__ . '/navigation.php';
 
-$query = 'SELECT * FROM lists WHERE user_id = :user_id';
-
-$statement = $database->prepare($query);
-$statement->bindParam(':user_id', $id, PDO::PARAM_INT);
-$statement->execute();
-$lists = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-$query = 'SELECT * FROM tasks WHERE user_id = :user_id';
-$statement = $database->prepare($query);
-$statement->bindParam(':user_id', $id, PDO::PARAM_INT);
-$statement->execute();
-
-$tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-
+$tasks = get_all_tasks($database);
 ?>
 <div class="content-panel">
     <h2 class="title">Lists</h2>
@@ -28,23 +14,25 @@ $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
         <?php
         if (isset($_SESSION['errors'])) :
             foreach ($_SESSION['errors'] as $error) : ?>
-                <p class="alert alert-danger"><?= $error ?></p>
+                <p class="alert alert-danger"><?php htmlspecialchars($error); ?></p>
             <?php endforeach;
             unset($_SESSION['errors']);
         endif;
         if (isset($_SESSION['list-created'])) : ?>
-            <p class="alert alert-success"><?php echo $_SESSION['list-created'] ?></p>
+            <p class="alert alert-success"><?php echo htmlspecialchars($_SESSION['list-created']); ?></p>
         <?php unset($_SESSION['list-created']);
         endif;
+        if (isset($_SESSION['list-edited'])) : ?>
+            <p class="alert alert-success"><?php echo htmlspecialchars($_SESSION['list-edited']); ?></p>
+        <?php unset($_SESSION['list-edited']);
+        endif;
         if (isset($_SESSION['list-deleted'])) : ?>
-            <p class="alert alert-success"><?php echo $_SESSION['list-deleted']; ?></p>
+            <p class="alert alert-success"><?php echo htmlspecialchars($_SESSION['list-deleted']); ?></p>
         <?php unset($_SESSION['list-deleted']);
         endif;
         ?>
 
-        <h1>Welcome, <?php echo htmlspecialchars($_SESSION['user']['name']) ?>, lets create a list! </h1>
-        <p><?php echo 'See all lists'; ?></p>
-
+        <h3 class="title"><?php echo htmlspecialchars($_SESSION['user']['name']); ?>, lets create a list to get more structured! </h3>
         <div class="form-group">
             <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
                 <button class="btn btn-primary all-lists">All Lists +</button>
@@ -63,28 +51,17 @@ $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <button type="submit" class="btn btn-primary">Add new list</button>
             </form>
         </section>
-        <!-- CREATE LIST END -->
-
         <hr>
-        <!-- SECTION SHOW LIST START -->
+
         <section class="show-list-container hidden">
-            <!-- TOP INFO -->
-            <div class="row">
-                <div class="col">
-                    <p>Titel</p>
-                </div>
-                <div class="col">
-                    <p style="text-decoration: solid;">Tasks</p>
-                </div>
-            </div>
-            <hr>
-            <!-- PRINT EACH LIST -->
-            <?php foreach ($lists as $list) : ?>
-                <!-- col-md-push-2 col-sm-push-3 col-xs-push-0 -->
+            <?php $lists = get_all_lists($database);
+            foreach ($lists as $list) : ?>
+
                 <div class="listRow" data-id="<?php echo $list['id'] ?>">
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="col">
-                            <h4> <?php echo $list["title"]; ?></h4>
+                            <span>Title</span>
+                            <h4> <?php echo htmlspecialchars($list["title"]); ?></h4>
                         </div>
                         <div class="col show-task">
                             <button type="submit" class="show-task btn"><img src="/assets/images/down-arrow.png" class="img-responsive" alt=""></button>
@@ -110,34 +87,40 @@ $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
                                 <small class="form-text">Please set at title for your list.</small>
                             </div>
                             <input type="hidden" value="<?php echo $list['id'] ?>" name="edit-list">
-                            <button type="submit" name="edit" value="<?php echo $list['id'] ?>" class="btn btn-primary"> <?= $list['id'] ?></button>
+                            <button type="submit" name="edit" value="<?php echo $list['id'] ?>" class="btn btn-primary">Edit list</button>
                         </form>
                     </section>
-                    <!-- EDIT TASK END -->
 
-                    <!-- SHOW LIST TASK -->
                     <section class="show-list-task hidden">
                         <?php foreach ($tasks as $task) :
 
+                            if ($list['id'] == $task['list_id']) : ?>
+                                <div class="col-sm-6">
+
+                                    <p>- <?php echo htmlspecialchars($task['title']); ?> <br></p>
+
+                                </div>
+                            <?php endif; ?>
+                        <?php
                         endforeach;
                         ?>
-
-
-                        <input type="hidden" value="<?php echo $list['id'] ?>" name="edit-list">
-                        <button type="submit" name="edit" value="<?php echo $list['id'] ?>" class="btn btn-primary"> <?= $list['id'] ?><img src="/assets/images/down-arrow.png" class="img-responsive" alt=""></button>
+                        <form action="/app/lists/delete-list-and-task.php" method="post">
+                            <input type="hidden" value="<?php echo $list['id'] ?>" name="delete-all">
+                            <button type="submit" name="delete-all" value="<?php echo $list['id'] ?>" class="btn btn-danger">Delete list</button>
+                            <small class="form-text">Delete list along with all its tasks.</small>
                         </form>
+
                     </section>
                     <hr>
-                    <!-- SHOW LIST TASK END -->
+
                 </div>
-            <?
+            <?php
             endforeach;
             ?>
         </section>
     </fieldset>
 </div>
 </div>
-<!-- </section> -->
 </div>
 </div>
 <?php

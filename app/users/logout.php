@@ -5,7 +5,6 @@ declare(strict_types=1);
 require __DIR__ . '/../autoload.php';
 
 unset($_SESSION['user']);
+session_destroy();
 
-//Logout the user
-
-redirect('/');
+redirect('/login.php');

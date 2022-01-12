@@ -29,24 +29,21 @@ if (isset($_POST['password'])) :
         $statement->bindParam(':id', $user_id, PDO::PARAM_INT);
         $statement->execute();
 
-        // delete users lists from database
-
         $query = 'DELETE FROM lists WHERE user_id = :user_id';
         $statement = $database->prepare($query);
         $statement->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $statement->execute();
-
-        // delete users tasks from database
 
         $query = 'DELETE FROM tasks WHERE user_id = :user_id';
         $statement = $database->prepare($query);
         $statement->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $statement->execute();
         unset($_SESSION['user']);
+        session_destroy();
 
         $_SESSION['confirm'][] = 'The account was successfully deleted.';
 
-        redirect('/Test.php');
+        redirect('/login.php');
 
     endif;
 

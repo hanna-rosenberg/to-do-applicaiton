@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 require __DIR__ . '/../autoload.php';
 
-//Create list
 
 if (isset($_POST['title'])) :
     $id = $_SESSION['user']['id'];
     $listTitle = trim($_POST['title']);
     $taskID = '';
-    //Add list to database
+
     $query = 'INSERT INTO lists (user_id, task_id, title) VALUES (:user_id, :task_id, :title)';
 
     $statement = $database->prepare($query);
@@ -20,15 +19,11 @@ if (isset($_POST['title'])) :
     $statement->bindParam(':title', $listTitle, PDO::PARAM_STR);
     $statement->execute();
 
-    //fetch list and then?
-    $query = 'SELECT * FROM lists WHERE user_id =' . (int) $id;
+    $_SESSION['list-created'] = 'The list was successfully created.';
 
-    $statement = $database->prepare($query);
-    $statement->execute();
-    $_SESSION['list'] = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-// foreach ($lists as $key => $value) :
-//     echo $value['title'];
-// endforeach;
+    redirect('/lists.php');
 endif;
-redirect('/');
+
+$_SESSION['list-errors'][] = 'Something went wrong, please try again.';
+
+redirect('/lists.php');
